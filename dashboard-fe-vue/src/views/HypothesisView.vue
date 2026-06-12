@@ -21,8 +21,8 @@
     </div>
 
     <div class="hypothesis-panel">
-      <div class="hypothesis-control">
-        <div>
+      <div class="hypothesis-header">
+        <div class="hypothesis-copy">
           <p class="section-kicker">{{ selected.kicker }}</p>
           <h3>{{ selected.title }}</h3>
           <p class="muted">{{ selected.desc }}</p>
