@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>흡연 여부 건강 데이터 분석 대시보드</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+  <header class="hero">
+    <nav class="topnav">
+      <a href="#overview">Overview</a>
+      <a href="#dynamic">Live charts</a>
+      <a href="#static">Notebook images</a>
+      <a href="#update">Update</a>
+    </nav>
+    <div class="hero-inner">
+      <p class="eyebrow">Smoking Health Data Analysis</p>
+      <h1>흡연 여부와 건강 지표 관계 분석</h1>
+      <p class="lead">CSV 데이터가 바뀌면 차트와 지표가 자동으로 다시 계산되는 GitHub Pages용 대시보드입니다.</p>
+      <div class="stats">
+        <div><b id="rowCount">-</b><span>데이터 행</span></div>
+        <div><b id="colCount">-</b><span>컬럼 수</span></div>
+        <div><b id="smokerRate">-</b><span>흡연자 비율</span></div>
+        <div><b id="updatedAt">-</b><span>로딩 상태</span></div>
+      </div>
+      <div class="upload-box">
+        <label for="csvUpload">로컬 CSV로 미리보기</label>
+        <input id="csvUpload" type="file" accept=".csv" />
+        <small>GitHub에 반영하려면 <code>data/smoking_health_data.csv</code> 파일을 교체하면 됩니다.</small>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="overview" class="section grid-two">
+      <div>
+        <p class="section-kicker">핵심 요약</p>
+        <h2>데이터 파일을 기준으로 주요 건강 지표가 실시간 집계됩니다.</h2>
+      </div>
+      <div class="summary-box" id="autoSummary">데이터를 불러오는 중입니다.</div>
+    </section>
+
+    <section id="dynamic" class="section">
+      <div class="section-title">
+        <p class="section-kicker">Live charts</p>
+        <h2>데이터 기반 자동 갱신 차트</h2>
+      </div>
+      <div class="chart-grid">
+        <article class="chart-card"><h3>흡연 여부 분포</h3><canvas id="labelChart"></canvas></article>
+        <article class="chart-card"><h3>BMI 구간 분포</h3><canvas id="bmiChart"></canvas></article>
+        <article class="chart-card"><h3>흡연 여부별 평균 건강 지표</h3><canvas id="meanChart"></canvas></article>
+        <article class="chart-card"><h3>나이와 중성 지방 관계</h3><canvas id="scatterChart"></canvas></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <p class="section-kicker">Table</p>
+        <h2>주요 지표 요약표</h2>
+      </div>
+      <div class="table-wrap"><table id="summaryTable"></table></div>
+    </section>
+
+    <section id="static" class="section">
+      <div class="section-title">
+        <p class="section-kicker">Notebook images</p>
+        <h2>기존 노트북 실행 결과 이미지</h2>
+        <p>기존 산출물도 같이 보존했습니다. 단, 아래 이미지는 CSV 교체만으로 자동 재생성되지는 않습니다.</p>
+      </div>
+      <div class="toolbar"><input id="search" placeholder="그래프 이름 검색: BMI, 혈압, HDL..." /></div>
+      <div class="chart-grid compact" id="chartGrid"></div>
+    </section>
+
+    <section id="update" class="section github-box">
+      <p class="section-kicker">GitHub update</p>
+      <h2>데이터 업데이트 방법</h2>
+      <ol>
+        <li>새 CSV의 컬럼명을 기존과 똑같이 맞춥니다. 예: <code>나이</code>, <code>BMI</code>, <code>공복 혈당</code>, <code>중성 지방</code>, <code>혈청 크레아티닌</code>, <code>헤모글로빈</code>, <code>label</code></li>
+        <li>GitHub 저장소에서 <code>data/smoking_health_data.csv</code>를 새 파일로 교체합니다.</li>
+        <li>커밋하면 GitHub Pages 주소의 대시보드가 자동으로 새 데이터를 읽습니다.</li>
+        <li>컬럼을 추가해도 기본 차트는 유지됩니다. 새 컬럼까지 차트에 넣으려면 <code>script.js</code>의 <code>METRIC_COLS</code>에 컬럼명만 추가하면 됩니다.</li>
+      </ol>
+    </section>
+  </main>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()"><div><button>닫기</button><h3 id="lightboxTitle"></h3><img id="lightboxImg" alt="확대 이미지"></div></div>
+  <script src="script.js"></script>
+</body>
+</html>
