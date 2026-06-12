@@ -378,3 +378,24 @@ th {
     max-width: none;
   }
 }
+
+.threshold-input {
+  box-sizing: border-box;
+  width: 230px;
+  max-width: 100%;
+  justify-self: end;
+}
+
+.threshold-input input {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  display: block;
+}
+
+@media (max-width: 860px) {
+  .threshold-input {
+    width: 100%;
+    justify-self: stretch;
+  }
+}
