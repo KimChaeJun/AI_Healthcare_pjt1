@@ -84,7 +84,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
-import { avg, fmt, loadCsv, num } from '../utils/csv'
+import { avg, loadCsv, num } from '../utils/csv'
 import type { HealthRow } from '../types/health'
 
 Chart.register(
