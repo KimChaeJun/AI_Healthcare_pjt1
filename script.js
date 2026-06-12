@@ -1,5 +1,39 @@
 const DATA_URL = 'data/smoking_health_data.csv';
 const METRIC_COLS = ['공복 혈당', '중성 지방', '혈청 크레아티닌', '헤모글로빈', 'BMI', '혈압'];
+
+const HYPOTHESES = {
+  hemo: {
+    no: 'Hypothesis 1',
+    title: '흡연자는 헤모글로빈 수치가 높을 것이다',
+    desc: '흡연 여부별 헤모글로빈 평균과 기준값 이상 비율을 비교합니다.',
+    metric: '헤모글로빈',
+    unit: '',
+    defaultThreshold: 15.0,
+    step: 0.1,
+    directionText: '높을수록 기준 초과'
+  },
+  tg: {
+    no: 'Hypothesis 2',
+    title: '흡연자는 중성 지방 수치가 높을 것이다',
+    desc: '흡연 여부별 중성 지방 평균과 150 이상 고위험군 비율을 비교합니다.',
+    metric: '중성 지방',
+    unit: '',
+    defaultThreshold: 150,
+    step: 1,
+    directionText: '높을수록 기준 초과'
+  },
+  creatinine: {
+    no: 'Hypothesis 3',
+    title: '흡연자는 혈청 크레아티닌 수치가 높을 것이다',
+    desc: '흡연 여부별 혈청 크레아티닌 평균과 기준값 이상 비율을 비교합니다.',
+    metric: '혈청 크레아티닌',
+    unit: '',
+    defaultThreshold: 1.2,
+    step: 0.1,
+    directionText: '높을수록 기준 초과'
+  }
+};
+
 const STATIC_IMAGES = [
   ['BMI 분포 & 흡연 여부별 공복 혈당','assets/cell24_00.png'],
   ['나이-중성지방 관계 & 헤모글로빈 분포','assets/cell25_00.png'],
@@ -8,6 +42,9 @@ const STATIC_IMAGES = [
 ];
 
 let charts = {};
+let hypothesisCharts = {};
+let currentRows = [];
+let currentHypothesis = 'hemo';
 
 function num(v){
   if(v === null || v === undefined || v === '') return null;
@@ -16,25 +53,35 @@ function num(v){
 }
 function avg(arr){ const xs = arr.filter(v => v !== null); return xs.length ? xs.reduce((a,b)=>a+b,0)/xs.length : null; }
 function fmt(v, d=1){ return v === null || Number.isNaN(v) ? '-' : Number(v).toFixed(d); }
+function pct(v){ return v === null || Number.isNaN(v) ? '-' : `${fmt(v, 1)}%`; }
 function labelName(v){ return String(v) === '1' ? '흡연자' : '비흡연자'; }
-function byLabel(rows, col){
-  return [0,1].map(label => avg(rows.filter(r => String(r.label) === String(label)).map(r => num(r[col]))));
-}
-function destroyCharts(){ Object.values(charts).forEach(c => c.destroy()); charts = {}; }
+function groupRows(rows, label){ return rows.filter(r => String(r.label) === String(label)); }
+function byLabel(rows, col){ return [0,1].map(label => avg(groupRows(rows, label).map(r => num(r[col])))); }
+function destroyChartBag(bag){ Object.values(bag).forEach(c => c && c.destroy()); }
+function destroyCharts(){ destroyChartBag(charts); charts = {}; }
+function destroyHypothesisCharts(){ destroyChartBag(hypothesisCharts); hypothesisCharts = {}; }
 
 function loadCsvText(text){
   Papa.parse(text, { header:true, dynamicTyping:false, skipEmptyLines:true, complete: res => renderDashboard(res.data) });
 }
 function loadDefault(){
-  Papa.parse(DATA_URL, { download:true, header:true, dynamicTyping:false, skipEmptyLines:true, complete: res => renderDashboard(res.data), error: () => document.getElementById('autoSummary').textContent = 'CSV 파일을 불러오지 못했습니다. data/smoking_health_data.csv 경로를 확인하세요.' });
+  Papa.parse(DATA_URL, {
+    download:true,
+    header:true,
+    dynamicTyping:false,
+    skipEmptyLines:true,
+    complete: res => renderDashboard(res.data),
+    error: () => document.getElementById('autoSummary').textContent = 'CSV 파일을 불러오지 못했습니다. data/smoking_health_data.csv 경로를 확인하세요.'
+  });
 }
 
 function renderDashboard(rows){
   rows = rows.filter(r => Object.keys(r).length && Object.values(r).some(v => v !== ''));
+  currentRows = rows;
   destroyCharts();
   const cols = rows.length ? Object.keys(rows[0]) : [];
-  const smokers = rows.filter(r => String(r.label) === '1').length;
-  const nonSmokers = rows.filter(r => String(r.label) === '0').length;
+  const smokers = groupRows(rows, 1).length;
+  const nonSmokers = groupRows(rows, 0).length;
   document.getElementById('rowCount').textContent = rows.length.toLocaleString();
   document.getElementById('colCount').textContent = cols.length.toLocaleString();
   document.getElementById('smokerRate').textContent = rows.length ? `${Math.round(smokers / rows.length * 100)}%` : '-';
@@ -42,9 +89,9 @@ function renderDashboard(rows){
 
   const hemo = byLabel(rows, '헤모글로빈');
   const tg = byLabel(rows, '중성 지방');
-  const cre = byLabel(rows, '혈청 크레아티닌');
   document.getElementById('autoSummary').innerHTML = `현재 데이터는 <b>${rows.length.toLocaleString()}행</b>입니다. 흡연자는 <b>${smokers.toLocaleString()}명</b>, 비흡연자는 <b>${nonSmokers.toLocaleString()}명</b>으로 집계됩니다.<br>평균 헤모글로빈은 비흡연자 ${fmt(hemo[0])}, 흡연자 ${fmt(hemo[1])} / 평균 중성 지방은 비흡연자 ${fmt(tg[0])}, 흡연자 ${fmt(tg[1])}입니다.`;
 
+  renderHypothesisSection();
   renderLabelChart(nonSmokers, smokers);
   renderBmiChart(rows);
   renderMeanChart(rows);
@@ -80,6 +127,92 @@ function renderSummaryTable(rows){
   table.innerHTML = header + body;
 }
 
+function getThreshold(){
+  const input = document.getElementById('thresholdValue');
+  const n = num(input.value);
+  return n === null ? HYPOTHESES[currentHypothesis].defaultThreshold : n;
+}
+function getOverStats(rows, metric, threshold){
+  return [0,1].map(label => {
+    const xs = groupRows(rows, label).map(r => num(r[metric])).filter(v => v !== null);
+    const over = xs.filter(v => v >= threshold).length;
+    const under = xs.length - over;
+    return { label, total: xs.length, over, under, rate: xs.length ? over / xs.length * 100 : null, mean: avg(xs) };
+  });
+}
+function ageBand(age){
+  if(age === null) return null;
+  if(age < 30) return '20대 이하';
+  if(age < 40) return '30대';
+  if(age < 50) return '40대';
+  if(age < 60) return '50대';
+  return '60대 이상';
+}
+function renderHypothesisSection(){
+  const hyp = HYPOTHESES[currentHypothesis];
+  const input = document.getElementById('thresholdValue');
+  document.getElementById('hypothesisKicker').textContent = hyp.no;
+  document.getElementById('hypothesisTitle').textContent = hyp.title;
+  document.getElementById('hypothesisDesc').textContent = hyp.desc;
+  document.getElementById('thresholdLabel').textContent = `${hyp.metric} 기준값`;
+  input.step = hyp.step;
+  if(!input.value || input.dataset.hypothesis !== currentHypothesis){
+    input.value = hyp.defaultThreshold;
+    input.dataset.hypothesis = currentHypothesis;
+  }
+  renderHypothesisCharts();
+}
+function renderHypothesisCharts(){
+  const hyp = HYPOTHESES[currentHypothesis];
+  const rows = currentRows;
+  const threshold = getThreshold();
+  const stats = getOverStats(rows, hyp.metric, threshold);
+  const non = stats[0], smk = stats[1];
+  destroyHypothesisCharts();
+
+  document.getElementById('hypMetric').textContent = hyp.metric;
+  document.getElementById('hypThreshold').textContent = fmt(threshold, hyp.step < 1 ? 1 : 0);
+  document.getElementById('hypSmokerOver').textContent = pct(smk.rate);
+  document.getElementById('hypNonSmokerOver').textContent = pct(non.rate);
+
+  hypothesisCharts.mean = new Chart(document.getElementById('hypMeanChart'), {
+    type:'bar',
+    data:{ labels:['비흡연자','흡연자'], datasets:[{ label:`평균 ${hyp.metric}`, data:[non.mean, smk.mean] }, { label:'기준값', data:[threshold, threshold], type:'line', pointRadius:0, borderWidth:2 }] },
+    options:{ scales:{ y:{ beginAtZero:false } }, plugins:{ legend:{ position:'bottom' } } }
+  });
+
+  hypothesisCharts.rate = new Chart(document.getElementById('hypOverRateChart'), {
+    type:'bar',
+    data:{ labels:['비흡연자','흡연자'], datasets:[{ label:'기준값 이상 비율(%)', data:[non.rate, smk.rate] }] },
+    options:{ scales:{ y:{ beginAtZero:true, max:100, ticks:{ callback:v=>v+'%' } } }, plugins:{ legend:{ display:false } } }
+  });
+
+  hypothesisCharts.count = new Chart(document.getElementById('hypCountChart'), {
+    type:'bar',
+    data:{ labels:['비흡연자','흡연자'], datasets:[{ label:'기준 미만', data:[non.under, smk.under] }, { label:'기준 이상', data:[non.over, smk.over] }] },
+    options:{ scales:{ x:{ stacked:true }, y:{ beginAtZero:true, stacked:true } }, plugins:{ legend:{ position:'bottom' } } }
+  });
+
+  const bands = ['20대 이하','30대','40대','50대','60대 이상'];
+  const ageData = bands.map(band => {
+    const inBand = rows.filter(r => ageBand(num(r['나이'])) === band);
+    const ns = getOverStats(inBand, hyp.metric, threshold);
+    return { band, nonRate: ns[0].rate, smokerRate: ns[1].rate };
+  });
+  hypothesisCharts.age = new Chart(document.getElementById('hypAgeChart'), {
+    type:'bar',
+    data:{ labels:bands, datasets:[{ label:'비흡연자', data:ageData.map(d=>d.nonRate) }, { label:'흡연자', data:ageData.map(d=>d.smokerRate) }] },
+    options:{ scales:{ y:{ beginAtZero:true, max:100, ticks:{ callback:v=>v+'%' } } }, plugins:{ legend:{ position:'bottom' } } }
+  });
+
+  const meanDiff = smk.mean !== null && non.mean !== null ? smk.mean - non.mean : null;
+  const rateDiff = smk.rate !== null && non.rate !== null ? smk.rate - non.rate : null;
+  const meanSentence = meanDiff === null ? '평균 비교가 어렵습니다.' : `흡연자 평균은 비흡연자보다 <b>${fmt(Math.abs(meanDiff), 2)}</b> ${meanDiff >= 0 ? '높습니다' : '낮습니다'}.`;
+  const rateSentence = rateDiff === null ? '기준값 이상 비율 비교가 어렵습니다.' : `기준값 이상 비율은 흡연자가 비흡연자보다 <b>${fmt(Math.abs(rateDiff), 1)}%p</b> ${rateDiff >= 0 ? '높습니다' : '낮습니다'}.`;
+  const conclusion = meanDiff !== null && rateDiff !== null && meanDiff > 0 && rateDiff > 0 ? '현재 데이터에서는 이 가설을 지지하는 방향의 패턴이 보입니다.' : '현재 데이터만으로는 가설을 강하게 지지한다고 보기 어렵습니다. 표본 수와 통계 검정을 함께 확인하는 것이 좋습니다.';
+  document.getElementById('hypothesisSummary').innerHTML = `<b>${hyp.title}</b><br>${meanSentence} ${rateSentence}<br><b>해석:</b> ${conclusion}`;
+}
+
 function renderStaticImages(){
   const grid = document.getElementById('chartGrid');
   grid.innerHTML = STATIC_IMAGES.map(([title,src]) => `<article class="chart-card" data-title="${title}"><div class="card-head"><h3>${title}</h3><span>Notebook</span></div><button class="image-button" onclick="openLightbox('${src}', '${title}')"><img src="${src}" alt="${title}" loading="lazy"></button></article>`).join('');
@@ -88,6 +221,15 @@ function openLightbox(src,title){const lb=document.getElementById('lightbox');do
 function closeLightbox(){document.getElementById('lightbox').classList.remove('show')}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox()});
 document.getElementById('csvUpload').addEventListener('change', e => { const file = e.target.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = () => loadCsvText(reader.result); reader.readAsText(file, 'utf-8'); });
+document.getElementById('thresholdValue').addEventListener('input', renderHypothesisCharts);
+document.querySelectorAll('.tab-button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentHypothesis = btn.dataset.hypothesis;
+    renderHypothesisSection();
+  });
+});
 renderStaticImages();
 const search=document.getElementById('search');if(search){search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();document.querySelectorAll('#chartGrid .chart-card').forEach(card=>{card.style.display=card.dataset.title.toLowerCase().includes(q)?'':'none'})})}
 loadDefault();

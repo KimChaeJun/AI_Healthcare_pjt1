@@ -12,6 +12,7 @@
   <header class="hero">
     <nav class="topnav">
       <a href="#overview">Overview</a>
+      <a href="#hypothesis">Hypothesis</a>
       <a href="#dynamic">Live charts</a>
       <a href="#static">Notebook images</a>
       <a href="#update">Update</a>
@@ -19,7 +20,7 @@
     <div class="hero-inner">
       <p class="eyebrow">Smoking Health Data Analysis</p>
       <h1>흡연 여부와 건강 지표 관계 분석</h1>
-      <p class="lead">CSV 데이터가 바뀌면 차트와 지표가 자동으로 다시 계산되는 GitHub Pages용 대시보드입니다.</p>
+      <p class="lead">CSV 데이터가 바뀌면 주요 지표, 가설별 기준값 분석, 차트와 요약표가 자동으로 다시 계산되는 GitHub Pages용 대시보드입니다.</p>
       <div class="stats">
         <div><b id="rowCount">-</b><span>데이터 행</span></div>
         <div><b id="colCount">-</b><span>컬럼 수</span></div>
@@ -39,8 +40,53 @@
       <div>
         <p class="section-kicker">핵심 요약</p>
         <h2>데이터 파일을 기준으로 주요 건강 지표가 실시간 집계됩니다.</h2>
+        <p class="muted">상단의 로컬 CSV 업로드는 임시 미리보기입니다. 실제 GitHub Pages에 반영하려면 저장소의 CSV 파일을 교체하고 커밋해야 합니다.</p>
       </div>
       <div class="summary-box" id="autoSummary">데이터를 불러오는 중입니다.</div>
+    </section>
+
+    <section id="hypothesis" class="section">
+      <div class="section-title">
+        <p class="section-kicker">Hypothesis Lab</p>
+        <h2>가설별 기준값 분석</h2>
+        <p class="muted">각 가설의 기준값을 바꾸면 기준 초과 비율, 평균 비교, 구간별 분포, 자동 해석이 함께 갱신됩니다.</p>
+      </div>
+
+      <div class="hypothesis-tabs" role="tablist" aria-label="가설 선택">
+        <button class="tab-button active" data-hypothesis="hemo">가설 1 · 헤모글로빈</button>
+        <button class="tab-button" data-hypothesis="tg">가설 2 · 중성 지방</button>
+        <button class="tab-button" data-hypothesis="creatinine">가설 3 · 혈청 크레아티닌</button>
+      </div>
+
+      <div class="hypothesis-panel">
+        <div class="hypothesis-control">
+          <div>
+            <p class="section-kicker" id="hypothesisKicker">Hypothesis 1</p>
+            <h3 id="hypothesisTitle">흡연자는 헤모글로빈 수치가 높을 것이다</h3>
+            <p id="hypothesisDesc" class="muted">흡연 여부별 헤모글로빈 평균과 기준값 이상 비율을 비교합니다.</p>
+          </div>
+          <label class="threshold-input">
+            <span id="thresholdLabel">기준값</span>
+            <input id="thresholdValue" type="number" step="0.1" />
+          </label>
+        </div>
+
+        <div class="hypothesis-stats">
+          <div><b id="hypMetric">-</b><span>분석 지표</span></div>
+          <div><b id="hypThreshold">-</b><span>현재 기준값</span></div>
+          <div><b id="hypSmokerOver">-</b><span>흡연자 기준 초과율</span></div>
+          <div><b id="hypNonSmokerOver">-</b><span>비흡연자 기준 초과율</span></div>
+        </div>
+
+        <div class="chart-grid">
+          <article class="chart-card"><h3>흡연 여부별 평균 비교</h3><canvas id="hypMeanChart"></canvas></article>
+          <article class="chart-card"><h3>기준값 이상 비율</h3><canvas id="hypOverRateChart"></canvas></article>
+          <article class="chart-card"><h3>기준값 기준 인원 분포</h3><canvas id="hypCountChart"></canvas></article>
+          <article class="chart-card"><h3>나이대별 기준값 이상 비율</h3><canvas id="hypAgeChart"></canvas></article>
+        </div>
+
+        <div class="summary-box hypothesis-summary" id="hypothesisSummary">가설 분석 결과를 계산하는 중입니다.</div>
+      </div>
     </section>
 
     <section id="dynamic" class="section">
@@ -68,7 +114,7 @@
       <div class="section-title">
         <p class="section-kicker">Notebook images</p>
         <h2>기존 노트북 실행 결과 이미지</h2>
-        <p>기존 산출물도 같이 보존했습니다. 단, 아래 이미지는 CSV 교체만으로 자동 재생성되지는 않습니다.</p>
+        <p class="muted">기존 산출물도 같이 보존했습니다. 단, 아래 이미지는 CSV 교체만으로 자동 재생성되지는 않습니다.</p>
       </div>
       <div class="toolbar"><input id="search" placeholder="그래프 이름 검색: BMI, 혈압, HDL..." /></div>
       <div class="chart-grid compact" id="chartGrid"></div>
@@ -78,10 +124,10 @@
       <p class="section-kicker">GitHub update</p>
       <h2>데이터 업데이트 방법</h2>
       <ol>
-        <li>새 CSV의 컬럼명을 기존과 똑같이 맞춥니다. 예: <code>나이</code>, <code>BMI</code>, <code>공복 혈당</code>, <code>중성 지방</code>, <code>혈청 크레아티닌</code>, <code>헤모글로빈</code>, <code>label</code></li>
+        <li>새 CSV의 컬럼명을 기존과 똑같이 맞춥니다. 예: <code>나이</code>, <code>BMI</code>, <code>공복 혈당</code>, <code>중성 지방</code>, <code>혈청 크레아티닌</code>, <code>헤모글로빈</code>, <code>혈압</code>, <code>label</code></li>
         <li>GitHub 저장소에서 <code>data/smoking_health_data.csv</code>를 새 파일로 교체합니다.</li>
         <li>커밋하면 GitHub Pages 주소의 대시보드가 자동으로 새 데이터를 읽습니다.</li>
-        <li>컬럼을 추가해도 기본 차트는 유지됩니다. 새 컬럼까지 차트에 넣으려면 <code>script.js</code>의 <code>METRIC_COLS</code>에 컬럼명만 추가하면 됩니다.</li>
+        <li>가설별 기준값은 대시보드 화면에서 직접 수정할 수 있습니다.</li>
       </ol>
     </section>
   </main>
