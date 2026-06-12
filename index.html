@@ -9,13 +9,14 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
+  
   <header class="hero">
     <nav class="topnav">
       <a href="#overview">Overview</a>
       <a href="#hypothesis">Hypothesis</a>
       <a href="#dynamic">Live charts</a>
       <a href="#static">Notebook images</a>
-      <a href="#update">Update</a>
+      <button class="nav-button" onclick="openUpdateModal()">Update</button>
     </nav>
     <div class="hero-inner">
       <p class="eyebrow">Smoking Health Data Analysis</p>
@@ -132,7 +133,26 @@
     </section>
   </main>
 
+  <div class="modal" id="updateModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeUpdateModal()">×</button>
+      <h2>데이터 업데이트 방법</h2>
+      <ol>
+        <li><code>data/smoking_health_data.csv</code> 파일을 새 CSV로 교체합니다.</li>
+        <li>컬럼명은 기존과 동일하게 유지합니다.</li>
+        <li>Git 명령어를 실행합니다.</li>
+      </ol>
+
+      <pre><code>git add data/smoking_health_data.csv
+  git commit -m "update dataset"
+  git push</code></pre>
+
+      <p>GitHub Pages 배포 후 새로고침하면 대시보드가 새 데이터를 읽습니다.</p>
+    </div>
+  </div>
+
   <div class="lightbox" id="lightbox" onclick="closeLightbox()"><div><button>닫기</button><h3 id="lightboxTitle"></h3><img id="lightboxImg" alt="확대 이미지"></div></div>
   <script src="script.js"></script>
+
 </body>
 </html>

@@ -231,5 +231,26 @@ document.querySelectorAll('.tab-button').forEach(btn => {
   });
 });
 renderStaticImages();
+
 const search=document.getElementById('search');if(search){search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();document.querySelectorAll('#chartGrid .chart-card').forEach(card=>{card.style.display=card.dataset.title.toLowerCase().includes(q)?'':'none'})})}
 loadDefault();
+
+function openUpdateModal() {
+  document.getElementById("updateModal").classList.add("show");
+}
+
+function closeUpdateModal() {
+  document.getElementById("updateModal").classList.remove("show");
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    closeUpdateModal();
+  }
+});
+
+document.getElementById("updateModal")?.addEventListener("click", (e) => {
+  if (e.target.id === "updateModal") {
+    closeUpdateModal();
+  }
+});
