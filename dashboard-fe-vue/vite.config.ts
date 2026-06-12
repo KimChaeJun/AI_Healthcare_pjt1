@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue()],
-  base: '/smoking-health-dashboard-dynamic/',
+  base: '/AI_Healthcare_pjt1/',
   resolve: {
     alias: {
       '@': '/src',
