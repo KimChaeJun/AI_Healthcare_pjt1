@@ -1,0 +1,272 @@
+# 흡연·건강지표 분석 대시보드 프로젝트 작업 기록
+
+## 기록 범위
+
+| 항목 | 값 |
+| --- | --- |
+| 프로젝트명 | 흡연·건강지표 분석 대시보드 |
+| 원본 저장소 / 소유자 | KimChaeJun/AI_Healthcare_pjt1 / KimChaeJun |
+| 본인 소유 여부 / 확인 근거 | 소유 저장소. 연결 계정 KimChaeJun 및 GitHub owner 메타데이터 대조 (E01). 소유권과 코드 저작·개인 기여는 구별함. |
+| 저장소 공개 범위 | 공개 |
+| 기본 브랜치 / 문서 반영 브랜치 | main / main |
+| 확인한 소스 커밋 / 조사 기준일 | 7d92774ecdb291d1c9303df623197724bfea4ef1 / 2026-11-05 (Asia/Seoul) |
+| 기본 브랜치 루트 timeline.md 반영 상태 | 이 문서는 기본 브랜치 루트 timeline.md로 생성하는 기록. 문서 생성 커밋과 위 소스 확인 커밋은 다름. 사이트 등록·배포는 별도 작업. |
+| 프로젝트 상태 / 실제 개발 기간 | Vue 대시보드·CSV 집계·가설 차트 구현 존재. 운영 배포·데이터 분석 재현은 미검증 / 전체 개발 기간 미확인 |
+| 본인 참여 기간 | 미확인. 커밋 날짜를 참여 시작·종료일로 사용하지 않음 (E91). |
+| 개인·팀 / 팀 규모·역할 분담 | 개인·팀 여부와 자료 분석·대시보드 구현 역할 분담 미확인 |
+| 연혁 날짜 기준 | Git author timestamp를 Asia/Seoul로 변환한 변경 기록일. 문서 작성일과 실제 개발·배포 사건일을 구별함. |
+
+## 포트폴리오 공개용 데이터
+
+프로젝트 전체의 확인된 구현을 설명하는 전달용 JSON입니다. 본인의 역할·참여 기간은 확인 후 채웁니다. 문서 작성만으로 사이트에 자동 등록되지는 않습니다.
+
+```json
+{
+  "slug": "ai-healthcare-pjt1",
+  "title": "흡연·건강지표 분석 대시보드",
+  "subtitle": "흡연 여부별 건강지표와 가설 기준값을 비교하는 CSV 기반 대시보드",
+  "category": "DATA DASHBOARD · FRONTEND",
+  "role": "",
+  "roleTags": [],
+  "year": "",
+  "period": "",
+  "award": "",
+  "summaryLines": [
+    "정적 CSV를 읽어 흡연·비흡연 그룹의 건강지표 평균과 차이를 계산합니다.",
+    "가설별 기준값을 조절하면 초과 비율·인원 분포·차트를 다시 계산합니다.",
+    "Vue·TypeScript·Chart.js로 분석 결과를 탐색하는 화면을 구성합니다."
+  ],
+  "overviewLines": [
+    "흡연 여부와 건강검진 지표를 그룹별로 비교하는 프런트엔드 대시보드입니다.",
+    "CSV 로더와 숫자 정규화·평균 계산 함수를 화면에서 공유합니다.",
+    "가설 화면은 사용자가 기준값을 바꾸며 그룹별 분포와 평균을 확인하도록 구성되어 있습니다."
+  ],
+  "tags": [
+    "Vue",
+    "TypeScript",
+    "Chart.js",
+    "Papa Parse",
+    "Vite"
+  ],
+  "roles": [],
+  "technologyStack": [
+    {
+      "category": "Frontend",
+      "description": "데이터 비교·가설 탐색 화면을 구성합니다.",
+      "technologies": [
+        "Vue",
+        "TypeScript",
+        "Vue Router"
+      ]
+    },
+    {
+      "category": "Data & Charts",
+      "description": "CSV 파싱·집계·차트 갱신을 담당합니다.",
+      "technologies": [
+        "Papa Parse",
+        "Chart.js"
+      ]
+    },
+    {
+      "category": "Build",
+      "description": "프런트엔드 개발·빌드 설정입니다.",
+      "technologies": [
+        "Vite"
+      ]
+    }
+  ],
+  "metrics": [],
+  "pipeline": [
+    {
+      "label": "CSV",
+      "description": "브라우저에서 정적 건강지표 CSV를 읽습니다."
+    },
+    {
+      "label": "GROUP",
+      "description": "흡연 label에 따라 집단을 나누고 수치 값을 정규화합니다."
+    },
+    {
+      "label": "COMPARE",
+      "description": "평균·차이·기준값 초과율·나이대 분포를 계산합니다."
+    },
+    {
+      "label": "VISUALIZE",
+      "description": "요약표와 가설 차트·설명 문구를 갱신합니다."
+    }
+  ],
+  "improvements": [],
+  "timeline": [
+    {
+      "date": "2026-06-12",
+      "title": "초기 대시보드 코드 등록",
+      "description": "분석 대시보드 초기 코드 등록 이력을 확인했습니다."
+    },
+    {
+      "date": "2026-06-12",
+      "title": "Vue 화면 구조로 변경",
+      "description": "HTML 화면을 Vue 구조로 옮기는 변경이 기록되어 있습니다."
+    },
+    {
+      "date": "2026-06-12",
+      "title": "가설 화면·스타일 보완",
+      "description": "가설 화면과 스타일 수정 기록을 확인했습니다."
+    },
+    {
+      "date": "2026-06-12",
+      "title": "Vite 설정 정리",
+      "description": "Vite 설정 변경 기록입니다. 현재 페이지 배포 성공을 검증한 것은 아닙니다."
+    }
+  ]
+}
+```
+
+## 문제와 설계 배경
+
+- 대상·문제: 흡연 여부별 건강검진 지표를 비교하고 분석 가설의 기준값에 따라 결과가 어떻게 달라지는지 탐색합니다 (E02).
+- 입력: 브라우저가 정적 CSV를 로드하며 label 문자열로 흡연·비흡연 집단을 구분합니다.
+- 구현: 공통 CSV·숫자·평균 함수와 Vue computed 상태를 사용하고 Chart.js로 가설 차트를 그립니다 (E03).
+- 정적·실시간 구별: 화면의 실시간은 기준값 변경에 따른 재계산입니다. 스트리밍 수집·주기적 원격 갱신 구현을 확인한 것은 아닙니다.
+- 현재 중복: LiveChartsView는 확인 버전에서 OverviewView와 동일한 내용입니다. 별도의 실시간 차트 완성으로 세지 않습니다 (E04).
+- 한계: 원본 데이터의 출처·대표성·라벨 정의·분석 결과 재현을 확인하지 않았으므로 평균 차이를 인과관계나 임상 결론으로 표현하지 않습니다.
+
+## 본인 역할과 기여
+
+대표 직무는 아직 확정하지 않았습니다. 다음은 현재 구현에서 확인한 **담당 범위 확인 후보**이며, 프로젝트 전체 기능을 본인의 기여로 단정하지 않습니다. Git 작성자는 변경 추적의 단서로만 사용합니다 (E91).
+
+| 영역 | 확인한 구현·의사결정과 개인 확인 범위 | 개인·팀 경계 | 근거 |
+| --- | --- | --- | --- |
+| 데이터 집계·정규화 | 공통 CSV 로더와 숫자 변환·평균 계산 구현 존재. 데이터 수집·정제·개인 구현 범위 확인 필요. | 개인·팀별 담당 미확인 | E03 |
+| 가설·인터랙션 UI | 기준값 입력·가설 선택·집단별 차트가 존재함. 가설 수립과 화면 구현의 담당 구분 필요. | 개인·팀별 담당 미확인 | E03 |
+| 프런트 구조·배포 | Vue 라우팅·Vite·페이지 배포 스크립트가 있음. 운영 배포·개인 담당 확인 필요. | 개인·팀별 담당 미확인 | E03, E04 |
+
+## 기술별 사용 내역
+
+기술명은 확인한 코드·문서·매니페스트에서 실제 사용 맥락이 드러나는 항목만 기록했습니다. 아래 목록은 저장소 스택이며 개인 숙련도 목록이 아닙니다.
+
+| 그룹 | 기술 | 용도·사용 위치 | 본인 사용 여부 | 상태 | 근거 |
+| --- | --- | --- | --- | --- | --- |
+| Frontend | Vue | 반응형 집계·화면 상태; [dashboard-fe-vue/src/views/OverviewView.vue](dashboard-fe-vue/src/views/OverviewView.vue) | 확인 필요 | 확인 커밋에서 사용; 현재 운영 여부 미확인 | E03 |
+| Frontend | TypeScript | 화면 스크립트·데이터 타입; [dashboard-fe-vue/src/views/HypothesisView.vue](dashboard-fe-vue/src/views/HypothesisView.vue) | 확인 필요 | 확인 커밋에서 사용; 현재 운영 여부 미확인 | E03 |
+| Frontend | Vue Router | 화면 경로 등록; [dashboard-fe-vue/src/router/index.ts](dashboard-fe-vue/src/router/index.ts) | 확인 필요 | 확인 커밋에서 사용; 현재 운영 여부 미확인 | E03 |
+| Data & Charts | Papa Parse | 정적 CSV 다운로드·헤더 파싱; [dashboard-fe-vue/src/utils/csv.ts](dashboard-fe-vue/src/utils/csv.ts) | 확인 필요 | 확인 커밋에서 사용; 현재 운영 여부 미확인 | E03 |
+| Data & Charts | Chart.js | 가설별 평균·초과율·나이대 차트; [dashboard-fe-vue/src/views/HypothesisView.vue](dashboard-fe-vue/src/views/HypothesisView.vue) | 확인 필요 | 확인 커밋에서 사용; 현재 운영 여부 미확인 | E03 |
+| Build | Vite | Vue 플러그인·base 경로·빌드; [dashboard-fe-vue/vite.config.ts](dashboard-fe-vue/vite.config.ts) | 확인 필요 | 확인 커밋에서 사용; 현재 운영 여부 미확인 | E03 |
+
+## 성과와 검증
+
+| 항목·값 | 측정일·환경·집계 대상 | 방법·출처 | 제한·근거 |
+| --- | --- | --- | --- |
+| 집계·시각화 경로 | 확인 커밋의 Vue·유틸리티 코드 | 그룹 평균·기준값 초과율·차트 갱신 경로 대조 | 브라우저 QA·원본 데이터 재계산 미실행. 수치 성과 없음 (E03). |
+| Live Charts 현재 상태 | 현재 소스 비교 | LiveChartsView·OverviewView 동일 내용 확인 | 독립 실시간 차트 완성이나 스트리밍 기능으로 기록하지 않음 (E04). |
+| 통계·인과 해석 | 미검증 | 평균 차이와 자동 설명 문구는 화면 로직 | 인과 효과·유의성·진단 정확도·AI 모델 성능 근거가 아님 (E92). |
+
+신규 실행 결과나 개선율은 없습니다. 코드·문서로 확인한 범위와 과거 기록의 한계를 구별하며, 서로 다른 테스트 집합을 합산하지 않습니다 (E92).
+
+### 수상·외부 평가
+
+수상 이력 없음. 2026-11-05 사용자 확인에 근거하며 공개 JSON의 award는 빈 문자열로 유지합니다 (E90). 외부 평가나 고객·사용자 수는 확인되지 않았습니다.
+
+## 문제 해결과 개선
+
+| 문제·제약 | 확인된 접근·변경과 이유 | 정적 검증 범위 | 남은 한계·근거 |
+| --- | --- | --- | --- |
+| 여러 화면에서 CSV 집계를 공유 | CSV 로더·숫자 변환·평균 함수를 분리 | 유틸리티 import와 실제 사용 확인 | 대규모·오류 CSV·결측 패턴 검증은 미수행 (E03). |
+| 기준값에 따른 집단 차이 탐색 | Vue 상태와 Chart.js를 연결해 초과율·인원·분포를 갱신 | 가설 화면의 상태·집계·그리기 코드 확인 | 그룹 차이를 인과·의학적 효과로 일반화하지 않음 (E03). |
+| 배포·화면 범위 혼동 | 현재 구현과 중복 화면·이전 주소를 분리해 기록 | 동일 파일 내용과 설정값 대조 | 실제 배포와 화면 분리는 별도 작업 (E04). |
+
+상기 내용은 설계 선택과 현재 구현을 설명합니다. 비교 가능한 과거 구현·전후 측정이 부족하므로 공개 JSON의 improvements는 빈 배열로 두었습니다.
+
+## 상세 작업 기록
+
+날짜는 모두 연도를 포함한 KST 변경 기록일입니다. 조사한 대표 커밋만 수록하며 전체 개발 기간이나 모든 작업을 뜻하지 않습니다.
+
+### 2026-06-12 / 초기 대시보드 코드 등록
+
+- 상태: 코드 이력 확인. 실제 실행·배포 성공 여부는 별도 검증하지 않았습니다.
+- 기록된 작업: 분석 대시보드 초기 코드 등록 이력을 확인했습니다.
+- 수행 주체: 저장소 변경 기록입니다. 개인 담당 범위는 아래 기여 확인 항목과 구별합니다.
+- 산출물·근거: `e669425a94318eb4970dabad438147b62ce8e331` (E20). 커밋 메시지와 현재 구현·문서 범위에서 확인했습니다.
+
+### 2026-06-12 / Vue 화면 구조로 변경
+
+- 상태: 코드 이력 확인. 실제 실행·배포 성공 여부는 별도 검증하지 않았습니다.
+- 기록된 작업: HTML 화면을 Vue 구조로 옮기는 변경이 기록되어 있습니다.
+- 수행 주체: 저장소 변경 기록입니다. 개인 담당 범위는 아래 기여 확인 항목과 구별합니다.
+- 산출물·근거: `d968fde2cdaaed5522a3f3287248883d57c8170d` (E21). 커밋 메시지와 현재 구현·문서 범위에서 확인했습니다.
+
+### 2026-06-12 / 가설 화면·스타일 보완
+
+- 상태: 코드 이력 확인. 실제 실행·배포 성공 여부는 별도 검증하지 않았습니다.
+- 기록된 작업: 가설 화면과 스타일 수정 기록을 확인했습니다.
+- 수행 주체: 저장소 변경 기록입니다. 개인 담당 범위는 아래 기여 확인 항목과 구별합니다.
+- 산출물·근거: `e58a16c35e3caba7b04921494ca672d5df6b9ca6` (E22). 커밋 메시지와 현재 구현·문서 범위에서 확인했습니다.
+
+### 2026-06-12 / Vite 설정 정리
+
+- 상태: 코드 이력 확인. 실제 실행·배포 성공 여부는 별도 검증하지 않았습니다.
+- 기록된 작업: Vite 설정 변경 기록입니다. 현재 페이지 배포 성공을 검증한 것은 아닙니다.
+- 수행 주체: 저장소 변경 기록입니다. 개인 담당 범위는 아래 기여 확인 항목과 구별합니다.
+- 산출물·근거: `7d92774ecdb291d1c9303df623197724bfea4ef1` (E23). 커밋 메시지와 현재 구현·문서 범위에서 확인했습니다.
+
+### 2026-11-05 / 프로젝트 기록 작성
+
+- 상태: 문서 작성.
+- 수행 내용: 기본 브랜치의 README·구현 코드·매니페스트·Git 기록을 대조하고 공개용 JSON, 기술 사용 내역, 근거 색인과 확인 항목을 작성했습니다.
+- 검증: JSON 파싱·필수 키·배열 항목 구조·근거 경로를 검사했습니다. 애플리케이션 실행이나 과거 테스트 재실행은 수행하지 않았습니다.
+- 수상: 사용자가 수상 이력이 없다고 확인한 내용을 반영했습니다 (E90).
+
+## 다음 계획
+
+아래는 자료에서 확인한 미수행 계획 또는 기록 보완 과제입니다. 완료 이력·성과에 포함하지 않습니다.
+
+- 원본 CSV 출처·라벨·전처리·표본 범위와 개인 분석·UI 담당을 확인합니다.
+- LiveCharts 중복과 배포 주소를 검토하고 브라우저 실행 근거·빌드 결과를 별도 보완합니다.
+
+## 공개 자료
+
+| 항목 | 값 | 공개 여부·한계 |
+| --- | --- | --- |
+| 서비스·데모 URL (liveUrl) | 빈 값 | package.json homepage에 이전 계정 주소가 있어 현재 운영 주소로 확정하지 않았습니다. 소스 설정을 실제 배포 성공으로 해석하지 않습니다. |
+| 공개 저장소 URL (githubUrl) | https://github.com/KimChaeJun/AI_Healthcare_pjt1 | GitHub 공개 저장소 메타데이터 확인 |
+| 대표 이미지 (coverImage) | 빈 값 | 대표 이미지와 재사용 가능 범위 미확인 |
+| 이미지 대체 텍스트 / 시연·발표 자료 | 미확인 | 검증한 공개 대표 자료가 없으면 링크·설명을 생성하지 않음 |
+
+## 근거 색인
+
+소스 위치는 위 확인 커밋을 기준으로 읽습니다. 비공개 원문의 코드·비밀값·사내 주소는 복사하지 않고 최소한의 상대 경로와 커밋만 기록합니다. 공개용 문자열에는 근거 ID나 구현 경로를 넣지 않습니다.
+
+| ID | 뒷받침하는 필드·주장 | 출처 종류·참조 | 출처 시점 | 확인 내용·한계 | 공개 범위 |
+| --- | --- | --- | --- | --- | --- |
+| E01 | slug, title, 기록 범위와 소유·브랜치·버전 | GitHub 저장소 메타데이터·기본 브랜치 파일 목록 | 2026-11-05 | 소유자 KimChaeJun, 확인 커밋 7d92774ecdb291d1c9303df623197724bfea4ef1; 전체 트리 비절단, 조사 당시 timeline.md 없음. 저장소 생성일·push일은 참여 기간으로 사용하지 않음. | 공개 |
+| E02 | subtitle, category, summaryLines, overviewLines, pipeline, 문제 배경 | 문서·코드 / [dashboard-fe-vue/src/views/OverviewView.vue](dashboard-fe-vue/src/views/OverviewView.vue), [dashboard-fe-vue/src/views/HypothesisView.vue](dashboard-fe-vue/src/views/HypothesisView.vue), [dashboard-fe-vue/src/utils/csv.ts](dashboard-fe-vue/src/utils/csv.ts) | 7d92774ecdb2 | 루트 README가 없고 하위 README는 Vite 템플릿 안내임. 실제 화면·CSV 로더·라우터에서 목적과 동작을 확인함. 이름의 AI만으로 AI 모델 프로젝트라고 분류하지 않음. | 공개 |
+| E03 | technologyStack, CSV·가설 차트·라우팅 | 문서·코드 / [dashboard-fe-vue/package.json](dashboard-fe-vue/package.json), [dashboard-fe-vue/src/views/OverviewView.vue](dashboard-fe-vue/src/views/OverviewView.vue), [dashboard-fe-vue/src/views/HypothesisView.vue](dashboard-fe-vue/src/views/HypothesisView.vue), [dashboard-fe-vue/src/utils/csv.ts](dashboard-fe-vue/src/utils/csv.ts), [dashboard-fe-vue/src/router/index.ts](dashboard-fe-vue/src/router/index.ts), [dashboard-fe-vue/vite.config.ts](dashboard-fe-vue/vite.config.ts) | 7d92774ecdb2 | Vue·TypeScript·Chart.js·Papa Parse 실제 import·호출과 Vite/라우팅 확인. 기준값 변경은 로컬 재계산이며 스트리밍 데이터 수집이 아님. | 공개 |
+| E04 | 현재 제한·배포 주소 불일치 | 문서·코드 / [dashboard-fe-vue/src/views/LiveChartsView.vue](dashboard-fe-vue/src/views/LiveChartsView.vue), [dashboard-fe-vue/src/views/OverviewView.vue](dashboard-fe-vue/src/views/OverviewView.vue), [dashboard-fe-vue/package.json](dashboard-fe-vue/package.json), [dashboard-fe-vue/vite.config.ts](dashboard-fe-vue/vite.config.ts) | 7d92774ecdb2 | 확인 버전의 LiveChartsView가 OverviewView와 동일한 소스. package.json homepage는 이전 계정 주소를 사용하며 현재 운영 여부는 확인하지 않음. | 공개 |
+| E20 | timeline[0], 상세 작업 기록 | Git commit / e669425a94318eb4970dabad438147b62ce8e331 | 2026-06-12 KST | 커밋 기록: ai_healthcare_1st_project Dashboard. 변경 기록일이며 착수·배포·수상일 또는 개인 수행 확정 근거로 확대하지 않음. | 공개 |
+| E21 | timeline[1], 상세 작업 기록 | Git commit / d968fde2cdaaed5522a3f3287248883d57c8170d | 2026-06-12 KST | 커밋 기록: update page html to Vue. 변경 기록일이며 착수·배포·수상일 또는 개인 수행 확정 근거로 확대하지 않음. | 공개 |
+| E22 | timeline[2], 상세 작업 기록 | Git commit / e58a16c35e3caba7b04921494ca672d5df6b9ca6 | 2026-06-12 KST | 커밋 기록: update HypothesisView.vue and css. 변경 기록일이며 착수·배포·수상일 또는 개인 수행 확정 근거로 확대하지 않음. | 공개 |
+| E23 | timeline[3], 상세 작업 기록 | Git commit / 7d92774ecdb291d1c9303df623197724bfea4ef1 | 2026-06-12 KST | 커밋 기록: update vite.config.ts. 변경 기록일이며 착수·배포·수상일 또는 개인 수행 확정 근거로 확대하지 않음. | 공개 |
+| E90 | award, 수상·외부 평가 | 사용자 진술 / 이 작업의 채팅 | 2026-11-05 KST | 사용자가 선택한 8개 프로젝트에 수상 이력이 없다고 확인함. award는 빈 문자열이며 미확인 수상을 만들지 않음. | 사용자 확인 사실; 대화 원문은 복사하지 않음 |
+| E91 | role, roleTags, roles, year, period와 개인 기여 | 자료 공백 / 확인한 문서·코드·Git 이력의 범위 | 2026-11-05 | 담당 직무·전체 참여 기간·개인/팀 규모는 별도 확인이 필요함. Git 작성자 계정, 저장소 소유권, 제공 코드의 존재만으로 직접 기여를 확정하지 않음. | 미확인 |
+| E92 | metrics, 성과와 검증 | 정적 조사 / 본 문서 작성 절차 | 2026-11-05 | 애플리케이션 실행·모델 학습·외부 API 호출·운영 환경 변경은 수행하지 않음. 문서의 JSON 형식·필수 키·근거 경로를 검증함. 과거 문서 수치는 아래 한계와 함께 보존하며 신규 실측값으로 표시하지 않음. | 검증 범위 공개 가능 |
+
+## 확인 필요 / 해당 없음
+
+| 항목 | 상태 | 현재 알려진 사실 | 추가 확인 |
+| --- | --- | --- | --- |
+| 대표 역할·개인 기여 | 미확인 | role은 빈 문자열, roleTags·roles는 빈 배열. 아래 후보 영역을 개인 실적으로 확정하지 않음. | 본인이 수행한 기능·설계·검증·협업 범위 확인 |
+| 참여·개발 기간 / year | 미확인 | year·period는 빈 문자열. 소스 연혁은 별도로 보존. | 실제 시작·종료 또는 진행 중 여부와 참여 기간 확인 |
+| 팀 규모·역할 분담 | 미확인 | 개인·팀 여부와 자료 분석·대시보드 구현 역할 분담 미확인 | 원 팀원 수와 역할 분담표 확인 |
+| 수상 | 해당 없음 | 사용자 확인에 따라 수상 이력 없음 (E90). | 없음 |
+| 성과 수치 / metrics | 미확인 | 신규 실측값 없음. metrics는 빈 배열이며 미측정 수치를 0으로 대체하지 않음. | 동일 조건의 측정 로그·기간·환경·집계 대상 확인 |
+| 실행·테스트 | 미실행 | 이번 작업은 정적 조사와 문서 검증. 테스트 코드의 존재를 통과 결과로 바꾸지 않음 (E92). | 필요한 실행 환경에서 별도 재현 |
+| 데이터 출처·라벨 | 미확인 | 흡연 label 0/1 비교 코드 확인. 원자료 출처·대표성·원본 전처리 과정은 미확인. | 출처 문서·라벨 정의·전처리 기록 |
+| 운영 URL | 상충 가능 | package.json에 이전 계정 homepage가 있음. 현재 저장소 소유자 주소와 달라 liveUrl을 비움. | 실제 GitHub Pages 설정·배포 성공 기록 |
+| 실시간·AI 기능 범위 | 구분 필요 | 정적 CSV와 기준값 재계산 구현. LiveCharts는 Overview와 동일하며 AI 모델 구현 근거는 없음. | 현재 의도와 별도 미완료 작업 확인 |
+
+## 사이트 반영 메모
+
+- 문서 위치: 소유 저장소 기본 브랜치 `main`의 루트 `timeline.md`. 해당 브랜치에 생성된 문서가 사이트 수록 여부를 검토할 근거입니다.
+- 역할·기여·참여 기간·팀 규모는 확인 후 공개 데이터를 보완합니다. AI PM은 선택하지 않았으므로 추가하지 않았습니다.
+- 수상 표시와 미측정 성과 카드는 숨겨야 하며, 빈 문자열·빈 배열을 가상의 값으로 대체하지 않습니다.
+- 공개 URL·대표 이미지가 확인되기 전에는 관련 링크·일러스트를 임의로 만들지 않습니다.
+- 이번 작업은 해당 저장소 문서 작성입니다. 포트폴리오 데이터 수정·사이트 등록·배포는 수행 범위에 포함하지 않습니다.
